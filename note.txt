@@ -1,5 +1,23 @@
-import torch
+import torch_directml
+from ultralytics import YOLO
 
-print("Is CUDA available?", torch.cuda.is_available())
-if torch.cuda.is_available():
-    print("GPU Device Name:", torch.cuda.get_device_name(0))
+if __name__ == "__main__":
+    # 1. Initialize the AMD GPU via DirectML
+    # This automatically selects your primary AMD Radeon GPU
+    dml_device = torch_directml.device()
+    print(f"Using device: {dml_device}")
+
+    # 2. Load the model
+    model = YOLO("yolo11n.pt")
+
+    # 3. Train the model
+    train_results = model.train(
+        data="./datasets/data.yaml",  # Path to dataset configuration file
+        epochs=100,                  # Number of training epochs
+        imgsz=640,                   # Image size for training
+        device=dml_device,           # Pass the DirectML device object here!
+        workers=0,                   # Kept at 0 to avoid Windows multiprocessing bugs
+    )
+
+    # 4. Evaluate the model's performance
+    metrics = model.val(device=dml_device)
