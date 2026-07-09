@@ -15,7 +15,7 @@ while(cap.read()):
     gray_blur = cv2.GaussianBlur(gray, (15, 15), 0)
 
     # pepering convert blur to binary for computer reading
-    # 
+    # []
     thresh = cv2.adaptiveThreshold(gray_blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 1)
 
     # matrix | kernel => table number
